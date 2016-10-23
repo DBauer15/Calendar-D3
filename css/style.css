@@ -1,0 +1,29 @@
+.bar {
+    fill: #a5c7ff;
+    stroke: #4377cc;
+    opacity: 0.80;
+}
+.bar:hover {
+    opacity: 1;
+}
+
+.tick line,path {
+    stroke: gray;
+    stroke-width: 1px;
+}
+
+.xaxis path {
+    stroke: gray;
+    stroke-width: 1px;
+    opacity: 0.5;
+}
+
+.yaxis path {
+    stroke-width: 0px;
+}
+
+.tick text {
+    fill: #9b9b9b;
+    font-size: 1.5em;
+    font-weight: 200;
+}
