@@ -17,10 +17,10 @@
 
         [{start: 7*60*60, duration: 7705}, {start: 11*60*60, duration: 2333}, {start: 17*60*60, duration: 7000}],
         [{start: 8*60*60, duration: 7705}, {start: 12*60*60, duration: 2333}, {start: 18*60*60, duration: 7000}],
-        [{start: 9*60*60, duration: 7705}, {start: 13*60*60, duration: 2333}, {start: 19*60*60, duration: 7000}],
+        [],
         [{start: 7*60*60, duration: 7705}, {start: 11*60*60, duration: 2333}, {start: 17*60*60, duration: 7000}],
         [{start: 8*60*60, duration: 7705}, {start: 12*60*60, duration: 2333}, {start: 18*60*60, duration: 7000}],
-        [{start: 9*60*60, duration: 7705}, {start: 13*60*60, duration: 2333}, {start: 19*60*60, duration: 7200}],
+        [{start: 9*60*60, duration: 7705}, {start: 13*60*60, duration: 2333}],
         [{start: 9*60*60, duration: 7705}, {start: 13*60*60, duration: 2333}, {start: 19*60*60, duration: 7200}],
 
     ];
@@ -59,7 +59,7 @@
             .tickSize(0)
             .tickSizeInner(-height)
             .ticks(7)
-            .tickPadding(10);
+            .tickPadding(15);
 
 
 
@@ -73,7 +73,7 @@
 
 
 
-    var barGroup = svgContainer.append("g")
+    var dayGroup = svgContainer.append("g")
             .selectAll("g")
             .data(data)
             .enter()
@@ -84,25 +84,35 @@
             });
 
 
-    barGroup.selectAll(".bar")
+    var barGroup = dayGroup.selectAll("g")
             .data(function (d) {
                 return d;
             })
             .enter()
-            .append("rect")
+            .append("g")
+            .attr("transform", function (d) {
+                return "translate("+1+","+(d.start/(24*60*60))*height+")";
+            });
+
+
+    barGroup.append("rect")
             .attr("class", "bar")
-            .attr("x", function (d,i) {
-                return 1;
-            })
-            .attr("y", function (d, i) {
-                return (d.start/(24*60*60))*height;
-            })
             .attr("height", function (d, i) {
                 return (d.duration/(24*60*60))*height;
             })
-            .attr("width", function (d) {
-                return width/daysOfTheWeek.length*0.96;
+            .attr("width", function () {
+                return width/daysOfTheWeek.length*0.975;
             });
+    barGroup.append("text")
+            .text(function (d) {
+                var format = d3.utcFormat("%H:%M");
+                return format(d.start*1000) + " - "+format((d.start+d.duration)*1000);
+
+            })
+            .attr("class", "barlabel")
+            .attr("x", "5")
+            .attr("y", "15");
+
 
 
     d3.selectAll(".xaxis .tick line")
